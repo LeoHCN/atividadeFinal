@@ -1,21 +1,29 @@
-import { Table, Container, Button,Image } from "react-bootstrap";
+import { Table, Container, Button, Image } from "react-bootstrap";
+import { excluirObjeto } from "../../services/servicoObjetos";
 
 
 export default function TabelaObjetos(props) {
 
-  function escolherObjetoEdicao(objeto){
+  function escolherObjetoEdicao(objeto) {
     props.setObjetoSelecionado(objeto);
     props.setModoEdicao(true);
     props.setExibirTabela(false);
   }
-  function apagarObjeto(id){
-    if (window.confirm("Deseja realmente apagar o objeto?")){
-      const listaNova = props?.listaObjetos.filter((objeto) => {
-        return objeto.id !== id;
+  function apagarObjeto(id) {
+    if (window.confirm("Deseja realmente apagar o objeto?")) {
+      excluirObjeto(id).then((resposta) => {
+        if (resposta.status) {
+          const listaNova = props?.listaObjetos.filter((objeto) => {
+            return objeto.id !== id;
+          });
+          props.setListaObjetos(listaNova);
+        }else{
+          alert(resposta.mensagem);
+        }
+      }).catch((erro) =>{
+        alert("Não foi possivel se comunicar com o Backend: " + erro);
       });
-      props.setListaObjetos(listaNova);
     }
-    
   }
 
   return (
@@ -36,12 +44,12 @@ export default function TabelaObjetos(props) {
       <Table striped bordered hover>
         <thead>
           <tr>
+            <th>Foto</th>
             <th>ID</th>
             <th>Nome</th>
             <th>Local</th>
             <th>Data</th>
             <th>Colaborador</th>
-            <th>Foto</th>
             <th>Observação</th>
             <th>Ações</th>
           </tr>
@@ -51,7 +59,7 @@ export default function TabelaObjetos(props) {
             props?.listaObjetos.map((objeto) => {
               return (
                 <tr key={objeto.id}>
-                  <td><Image src={objeto.foto} rounded /></td>
+                  <td><Image style={{ width: "100px", height: "100px" }} src={objeto.foto} fluid ></Image></td>
                   <td>{objeto.id}</td>
                   <td>{objeto.nome}</td>
                   <td>{objeto.local}</td>

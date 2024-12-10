@@ -3,7 +3,7 @@ import { ContextoUsuario } from "../../App";
 import { useContext, useRef } from "react";
 
 export default function FormLogin(props) {
-  const [usuario, setUsuario] = useContext(ContextoUsuario);
+  const {usuario, setUsuario} = useContext(ContextoUsuario);
   const emailRef = useRef();
   const senhaRef =  useRef();
 

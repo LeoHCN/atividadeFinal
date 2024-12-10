@@ -1,5 +1,6 @@
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useState } from "react";
+import { cadastrarObjeto, alterarObjeto } from "../../services/servicoObjetos";
 
 export default function FormularioCadObjeto(props) {
 
@@ -18,24 +19,40 @@ export default function FormularioCadObjeto(props) {
     if (formulario.checkValidity()) {
       setValidado(false);
       if (!props.modoEdicao) {
-        props.listaObjetos.push(objeto);
-        props.setExibirTabela(true);
-      }else{
-        const indice = props.listaObjetos.findIndex((obj) =>{ return obj.id == objeto.id});
-        props.listaObjetos[indice] = objeto;
-        props.setModoEdicao(false);
-        props.setObjetoSelecionado({
-          id: "",
-          nome: "",
-          local: "",
-          data: "",
-          colaborador: "",
-          foto: "",
-          observacao: "",
+        cadastrarObjeto(objeto).then((resposta) => {
+          if (resposta.status) {
+            props.listaObjetos.push(objeto);
+            props.setExibirTabela(true);
+          } else {
+            alert(resposta.mensagem);
+          }
+        }).catch((erro) => {
+          alert("Não foi possivel se comunicar com o Backend: " + erro);
         });
-        props.setExibirTabela(true);
-      }
+      } else {
 
+        alterarObjeto(objeto).then((resposta) => {
+          if (resposta.status) {
+            const indice = props.listaObjetos.findIndex((obj) => { return obj.id === objeto.id });
+            props.listaObjetos[indice] = objeto;
+            props.setModoEdicao(false);
+            props.setObjetoSelecionado({
+              id: "",
+              nome: "",
+              local: "",
+              data: "",
+              colaborador: "",
+              foto: "",
+              observacao: "",
+            });
+            props.setExibirTabela(true);
+          }else{
+            alert(resposta.mensagem);
+          };
+        }).catch((erro) =>{
+          alert("Não foi possivel se comunicar com o Backend: " + erro);
+        });
+      };
     } else {
       setValidado(true);
     }

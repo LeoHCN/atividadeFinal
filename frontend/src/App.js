@@ -15,7 +15,7 @@ function App() {
   if (usuario.logado) {
     return (
       <div className="App">
-        <ContextoUsuario.Provider value={[usuario, setUsuario]}>
+        <ContextoUsuario.Provider value={{usuario, setUsuario}}>
           <BrowserRouter>
             <Routes>
               <Route path="/" exact element={<TelaMenu />} />
@@ -30,7 +30,7 @@ function App() {
   } else {
     return (
       <div className="App">
-        <ContextoUsuario.Provider value={[usuario, setUsuario]}>
+        <ContextoUsuario.Provider value={{usuario, setUsuario}}>
           <TelaLogin />
         </ContextoUsuario.Provider>
       </div>
