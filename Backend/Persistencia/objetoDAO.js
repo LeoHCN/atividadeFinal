@@ -13,7 +13,7 @@ export default class ObjetoDAO {
       local VARCHAR(120) NOT NULL,
       data DATE NOT NULL,
       colaborador VARCHAR(80) NOT NULL,
-      foto VARCHAR(120) NOT NULL,
+      foto VARCHAR(200) NOT NULL,
       observacao VARCHAR(255),
       CONSTRAINT pk_objeto PRIMARY KEY (id));
       `;
